@@ -1,7 +1,14 @@
 "use client";
-import { useState } from "react";
-import { motion, cubicBezier } from "framer-motion";
+import { useRef, useState } from "react";
+import {
+  motion,
+  cubicBezier,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import Turnstile from "@/components/Turnstile";
+import StickyCTA from "@/components/StickyCTA";
 
 const EASE = cubicBezier(0.22, 1, 0.36, 1);
 
@@ -9,6 +16,14 @@ export default function Page() {
   const [turnstileToken, setTurnstileToken] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [err, setErr] = useState("");
+
+  const reduce = useReducedMotion();
+
+  // Parallax refs/values for hero
+  const heroRef = useRef<HTMLDivElement | null>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start end", "end start"] });
+  const imgY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -40]);
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -20]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -61,11 +76,20 @@ export default function Page() {
 
       {/* HERO */}
       <section className="bg-emerald-900 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-18 md:pt-28 pb-16 grid md:grid-cols-2 gap-12 items-center">
+        <div
+          ref={heroRef}
+          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-18 md:pt-28 pb-16 grid md:grid-cols-2 gap-12 items-center"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            style={{ y: titleY }}
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{
+              type: "spring",
+              stiffness: 120,
+              damping: 20,
+              mass: 0.8,
+            }}
             viewport={{ once: true }}
           >
             <p className="uppercase tracking-widest text-[11px] text-emerald-200 mb-3">
@@ -103,9 +127,9 @@ export default function Page() {
               ].map((t, i) => (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: reduce ? 0 : 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.06 }}
+                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.06 }}
                   viewport={{ once: true }}
                   className="flex items-center gap-2"
                 >
@@ -121,7 +145,8 @@ export default function Page() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            style={{ y: imgY }}
+            initial={{ opacity: 0, y: reduce ? 0 : 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
             viewport={{ once: true }}
@@ -136,9 +161,9 @@ export default function Page() {
       <section id="services" className="bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
@@ -175,10 +200,11 @@ export default function Page() {
             ].map((card, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.06 }}
+                transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.06 }}
                 viewport={{ once: true }}
+                whileHover={{ y: reduce ? 0 : -2, scale: reduce ? 1 : 1.01 }}
                 className="rounded-2xl border bg-white shadow-sm"
               >
                 <div className="p-6">
@@ -195,9 +221,9 @@ export default function Page() {
       <section className="bg-slate-900 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-20">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
             className="max-w-3xl"
           >
@@ -224,9 +250,9 @@ export default function Page() {
             ].map((v, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.08 }}
+                transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.08 }}
                 viewport={{ once: true }}
                 className="rounded-2xl bg-white/5 ring-1 ring-white/10 p-6"
               >
@@ -242,9 +268,9 @@ export default function Page() {
       <section id="approach" className="bg-slate-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
@@ -254,24 +280,15 @@ export default function Page() {
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              {
-                t: "Assess",
-                d: "On-site surveys, soils/hydrology review, and baseline wildlife/habitat inventories.",
-              },
-              {
-                t: "Plan",
-                d: "Scenario planning with targets, budgets, and success metrics.",
-              },
-              {
-                t: "Implement & monitor",
-                d: "Contractor oversight, native installs, and seasonal monitoring with annual reports.",
-              },
+              { t: "Assess", d: "On-site surveys, soils/hydrology review, and baseline wildlife/habitat inventories." },
+              { t: "Plan", d: "Scenario planning with targets, budgets, and success metrics." },
+              { t: "Implement & monitor", d: "Contractor oversight, native installs, and seasonal monitoring with annual reports." },
             ].map((s, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.06 }}
+                transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.06 }}
                 viewport={{ once: true }}
                 className="rounded-2xl border bg-white shadow-sm"
               >
@@ -289,9 +306,9 @@ export default function Page() {
       <section id="work" className="bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
@@ -301,43 +318,20 @@ export default function Page() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
-              {
-                img: "https://images.unsplash.com/photo-1524790672308-46bbd6e19f5e?q=80&w=1200&auto=format&fit=crop",
-                title: "Farmland to Easement",
-                tag: "MS Gulf Coastal Plain",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1465397792955-1492b20f0f53?q=80&w=1200&auto=format&fit=crop",
-                title: "Waterfowl Wetland Enhancement",
-                tag: "Black Belt, AL",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1552083375-1447ce886485?q=80&w=1200&auto=format&fit=crop",
-                title: "Post-Industrial Reforestation",
-                tag: "Metro Atlanta, GA",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1545243424-0ce743321e11?q=80&w=1200&auto=format&fit=crop",
-                title: "Riparian Buffer Rebuild",
-                tag: "Tennessee Valley",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200&auto=format&fit=crop",
-                title: "Native Pine–Oak Savannah",
-                tag: "Huntsville Uplands, AL",
-              },
-              {
-                img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=1200&auto=format&fit=crop",
-                title: "Upland Quail Habitat",
-                tag: "Appalachian Foothills",
-              },
+              { img: "https://images.unsplash.com/photo-1524790672308-46bbd6e19f5e?q=80&w=1200&auto=format&fit=crop", title: "Farmland to Easement", tag: "MS Gulf Coastal Plain" },
+              { img: "https://images.unsplash.com/photo-1465397792955-1492b20f0f53?q=80&w=1200&auto=format&fit=crop", title: "Waterfowl Wetland Enhancement", tag: "Black Belt, AL" },
+              { img: "https://images.unsplash.com/photo-1552083375-1447ce886485?q=80&w=1200&auto=format&fit=crop", title: "Post-Industrial Reforestation", tag: "Metro Atlanta, GA" },
+              { img: "https://images.unsplash.com/photo-1545243424-0ce743321e11?q=80&w=1200&auto=format&fit=crop", title: "Riparian Buffer Rebuild", tag: "Tennessee Valley" },
+              { img: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200&auto=format&fit=crop", title: "Native Pine–Oak Savannah", tag: "Huntsville Uplands, AL" },
+              { img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=1200&auto=format&fit=crop", title: "Upland Quail Habitat", tag: "Appalachian Foothills" },
             ].map((p, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: reduce ? 0 : 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut", delay: i * 0.05 }}
+                transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.05 }}
                 viewport={{ once: true }}
+                whileHover={{ y: reduce ? 0 : -4, scale: reduce ? 1 : 1.02 }}
                 className="rounded-2xl overflow-hidden border bg-white shadow-sm"
               >
                 <div className="aspect-[4/3] bg-gray-100">
@@ -357,18 +351,18 @@ export default function Page() {
       <section id="about" className="bg-emerald-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24 grid md:grid-cols-2 gap-12 items-center">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
           >
             <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Who we are</p>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Biologists, builders, and good neighbors</h2>
             <p className="mt-4 text-gray-700">
               Wild Lands Ecological Services is a field-first team delivering restoration and wildlife
-              management across the Southeast. We pair practical experience with rigorous
-              monitoring—so landowners, tribal nations, and partners see exactly what their
-              investment returns in habitat function and recreational value.
+              management across the Southeast. We pair practical experience with rigorous monitoring—so
+              landowners, tribal nations, and partners see exactly what their investment returns in
+              habitat function and recreational value.
             </p>
             <ul className="mt-6 grid gap-2 text-sm text-gray-800">
               <li>Permitting-aware plans (ESA/MBTA/CWA)</li>
@@ -379,7 +373,7 @@ export default function Page() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
             viewport={{ once: true }}
@@ -392,9 +386,9 @@ export default function Page() {
       <section id="contact" className="bg-neutral-900 text-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
@@ -404,9 +398,9 @@ export default function Page() {
 
           <div className="grid md:grid-cols-2 gap-8">
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: reduce ? 0 : 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: EASE }}
+              transition={{ type: "spring", stiffness: 120, damping: 20 }}
               viewport={{ once: true }}
               className="rounded-2xl bg-white text-neutral-900 shadow-sm"
             >
@@ -442,7 +436,7 @@ export default function Page() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
+              initial={{ opacity: 0, y: reduce ? 0 : 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, ease: EASE, delay: 0.08 }}
               viewport={{ once: true }}
@@ -470,6 +464,9 @@ export default function Page() {
           </div>
         </div>
       </section>
+
+      {/* Sticky CTA */}
+      <StickyCTA />
 
       <footer className="border-t bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
