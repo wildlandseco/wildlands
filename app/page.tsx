@@ -53,7 +53,7 @@ export default function Page() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
           {/* Logo + Title */}
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 relative">
+            <div className="h-12 w-12 relative">
               <Image
                 src="/logo-wildlands.png" // ← make sure this exists in /public
                 alt="Wild Lands Logo"
@@ -102,7 +102,7 @@ export default function Page() {
           <h2 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-4">
             Wild Lands
           </h2>
-          <h2 className="text-4xl md:text-6xl font-semibold tracking-tight leading-tight mb-4">
+          <h2 className="text-3xl md:text-6xl font-semibold tracking-tight leading-tight mb-4">
             Ecological Services
           </h2>
           <p className="text-lg md:text-xl text-emerald-100 mb-8">
