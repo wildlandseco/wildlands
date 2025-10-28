@@ -64,7 +64,7 @@ export default function Page() {
               />
             </div>
             <div>
-              <p className="text-[20px] uppercase tracking-widest text-emerald-700">Wild Lands</p>
+              <p className="font-semibold text-[20px] uppercase tracking-widest text-emerald-700">Wild Lands</p>
               <h1 className="font-regular leading-none text-neutral-700">Ecological Services</h1>
             </div>
           </div>
@@ -99,8 +99,11 @@ export default function Page() {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 text-center max-w-3xl px-4">
-          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4">
-            Wild Lands Ecological Services
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-4">
+            Wild Lands
+          </h2>
+          <h2 className="text-4xl md:text-6xl font-semibold tracking-tight leading-tight mb-4">
+            Ecological Services
           </h2>
           <p className="text-lg md:text-xl text-emerald-100 mb-8">
             Stewardship rooted in native ecology — helping landowners, tribes, and partners restore balance to their landscapes.
