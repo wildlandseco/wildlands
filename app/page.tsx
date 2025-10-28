@@ -1,27 +1,12 @@
 "use client";
-import { useRef, useState } from "react";
-import {
-  motion,
-  cubicBezier,
-  useScroll,
-  useTransform,
-  useReducedMotion,
-} from "framer-motion";
+import { useState } from "react";
+import Image from "next/image";
 import Turnstile from "@/components/Turnstile";
-import StickyCTA from "@/components/StickyCTA";
-
-const EASE = cubicBezier(0.22, 1, 0.36, 1);
 
 export default function Page() {
   const [turnstileToken, setTurnstileToken] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [err, setErr] = useState("");
-
-  const reduce = useReducedMotion();
-  const heroRef = useRef<HTMLDivElement | null>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start end", "end start"] });
-  const imgY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -40]);
-  const titleY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -20]);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -43,27 +28,37 @@ export default function Page() {
   }
 
   return (
-    <div className="min-h-screen text-gray-900">
+    <div className="min-h-screen bg-white text-neutral-900">
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b">
+      <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-neutral-200">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+          {/* Logo + Title */}
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-2xl bg-emerald-700 text-white grid place-items-center font-bold">
-              WL
+            <div className="h-10 w-10 relative">
+              <Image
+                src="/logo-wildlands.png" // <— Save your transparent logo here
+                alt="Wild Lands Logo"
+                fill
+                sizes="40px"
+                className="object-contain"
+                priority
+              />
             </div>
             <div>
-              <p className="text-[13px] uppercase tracking-widest text-emerald-700">Wild Lands</p>
-              <h1 className="font-semibold leading-none">Ecological Services</h1>
+              <p className="text-[11px] uppercase tracking-widest text-emerald-700">Wild Lands</p>
+              <h1 className="font-semibold leading-none text-neutral-900">Ecological Services</h1>
             </div>
           </div>
-          <nav className="hidden md:flex items-center gap-8 text-sm">
+
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
             <a href="#services" className="hover:text-emerald-700">Services</a>
-            <a href="#ethic" className="hover:text-emerald-700">Our Ethic</a>
             <a href="#approach" className="hover:text-emerald-700">Approach</a>
             <a href="#work" className="hover:text-emerald-700">Projects</a>
             <a href="#about" className="hover:text-emerald-700">About</a>
             <a href="#contact" className="hover:text-emerald-700">Contact</a>
           </nav>
+
           <a
             href="#contact"
             className="hidden md:inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800"
@@ -73,83 +68,33 @@ export default function Page() {
         </div>
       </header>
 
-      {/* HERO */}
-      <section className="bg-emerald-900 text-white">
-        <div
-          ref={heroRef}
-          className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-18 md:pt-28 pb-16 grid md:grid-cols-2 gap-12 items-center"
-        >
-          <motion.div
-            style={{ y: titleY }}
-            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 120, damping: 20, mass: 0.8 }}
-            viewport={{ once: true }}
+      {/* HERO SECTION (Video Background) */}
+      <section className="relative h-[90vh] overflow-hidden flex items-center justify-center text-white">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/hero-video.mp4" // replace with your wildlife/nature footage
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative z-10 text-center max-w-3xl px-4">
+          <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-tight mb-4">
+            Wild Lands Ecological Services
+          </h2>
+          <p className="text-lg md:text-xl text-emerald-100 mb-8">
+            Stewardship rooted in native ecology — helping landowners, tribes, and partners restore balance to their landscapes.
+          </p>
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-emerald-700 text-white font-semibold text-sm hover:bg-emerald-800"
           >
-            <p className="uppercase tracking-widest text-[15px] text-emerald-200 mb-3">
-              Stewardship Partner • Science-Led • Field-Proven
-            </p>
-            <h2 className="text-4xl md:text-6xl font-bold leading-tight">
-              Bring Your Land Back to Life
-            </h2>
-            <p className="mt-5 text-lg text-emerald-100 max-w-xl">
-              We restore native wildlife habitat—coastal estuaries to upland pine–oak—by pairing
-              ancestral respect and modern ecology. Plans are permit-aware, implementation is
-              hands-on, and results are measured, not assumed.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <a
-                href="#contact"
-                className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold bg-white text-emerald-900 hover:bg-emerald-50"
-              >
-                Request a Consult
-              </a>
-              <a
-                href="#approach"
-                className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold ring-1 ring-inset ring-emerald-300 text-white/90 hover:text-white"
-              >
-                See Our Approach
-              </a>
-            </div>
-
-            <div className="mt-8 grid grid-cols-2 gap-4 text-sm">
-              {[
-                "Native-First Design",
-                "Hydrology Leads",
-                "Active Stewardship",
-                "Measured Outcomes",
-              ].map((t, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: reduce ? 0 : 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.06 }}
-                  viewport={{ once: true }}
-                  className="flex items-center gap-2"
-                >
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" /> <span>{t}</span>
-                </motion.div>
-              ))}
-            </div>
-
-            <p className="mt-10 text-sm text-emerald-200">
-              Trusted by private landowners, <span className="font-semibold">tribal nations</span>,
-              and conservation partners across the Southeast.
-            </p>
-          </motion.div>
-
-          <motion.div
-            style={{ y: imgY }}
-            initial={{ opacity: 0, y: reduce ? 0 : 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <div className="aspect-[4/3] rounded-2xl bg-[url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1400&auto=format&fit=crop')] bg-cover bg-center shadow-2xl border border-white/10" />
-          </motion.div>
+            Start Your Project
+          </a>
         </div>
       </section>
+
 
       {/* SERVICES */}
       <section id="services" className="bg-white">
