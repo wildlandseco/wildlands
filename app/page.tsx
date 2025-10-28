@@ -132,7 +132,7 @@ export default function Page() {
               ))}
             </div>
 
-            <p className="mt-10 text-md text-emerald-200">
+            <p className="mt-10 text-sm text-emerald-200">
               Trusted by private landowners, <span className="font-semibold">tribal nations</span>,
               and conservation partners across the Southeast.
             </p>
@@ -222,7 +222,9 @@ export default function Page() {
           >
             <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Our Values</p>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              Traditional Ethic. 
+              Traditional Ethic.
+            </h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
               Modern Results.
             </h2>
             <p className="mt-4 text-white/85">
