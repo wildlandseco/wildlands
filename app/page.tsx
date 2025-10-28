@@ -58,14 +58,14 @@ export default function Page() {
                 src="/logo-wildlands.png" // ← make sure this exists in /public
                 alt="Wild Lands Logo"
                 fill
-                sizes="40px"
+                sizes="50px"
                 className="object-contain"
                 priority
               />
             </div>
             <div>
-              <p className="text-[11px] uppercase tracking-widest text-emerald-700">Wild Lands</p>
-              <h1 className="font-semibold leading-none text-neutral-900">Ecological Services</h1>
+              <p className="text-[15px] uppercase tracking-widest text-emerald-750">Wild Lands</p>
+              <h1 className="font-semibold leading-none text-neutral-800">Ecological Services</h1>
             </div>
           </div>
 
