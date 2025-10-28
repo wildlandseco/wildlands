@@ -52,7 +52,7 @@ export default function Page() {
               WL
             </div>
             <div>
-              <p className="text-[11px] uppercase tracking-widest text-emerald-700">Wild Lands</p>
+              <p className="text-[13px] uppercase tracking-widest text-emerald-700">Wild Lands</p>
               <h1 className="font-semibold leading-none">Ecological Services</h1>
             </div>
           </div>
@@ -86,7 +86,7 @@ export default function Page() {
             transition={{ type: "spring", stiffness: 120, damping: 20, mass: 0.8 }}
             viewport={{ once: true }}
           >
-            <p className="uppercase tracking-widest text-[20px] text-emerald-200 mb-3">
+            <p className="uppercase tracking-widest text-[15px] text-emerald-200 mb-3">
               Stewardship Partner • Science-Led • Field-Proven
             </p>
             <h2 className="text-4xl md:text-6xl font-bold leading-tight">
@@ -132,7 +132,7 @@ export default function Page() {
               ))}
             </div>
 
-            <p className="mt-10 text-lg text-emerald-200">
+            <p className="mt-10 text-md text-emerald-200">
               Trusted by private landowners, <span className="font-semibold">tribal nations</span>,
               and conservation partners across the Southeast.
             </p>
