@@ -1,12 +1,31 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion"; // ✅ animations
 import Turnstile from "@/components/Turnstile";
+
+/** Sticky CTA used at the bottom of the page */
+function StickyCTA() {
+  return (
+    <div className="fixed bottom-4 inset-x-0 z-40 px-4 md:px-0">
+      <div className="mx-auto max-w-7xl">
+        <a
+          href="#contact"
+          className="block md:hidden rounded-xl px-5 py-3 text-center font-semibold bg-emerald-700 text-white shadow-lg shadow-emerald-900/20 hover:bg-emerald-800"
+        >
+          Request a Consult
+        </a>
+      </div>
+    </div>
+  );
+}
 
 export default function Page() {
   const [turnstileToken, setTurnstileToken] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [err, setErr] = useState("");
+
+  const reduce = useReducedMotion(); // ✅ respect reduced-motion
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -36,7 +55,7 @@ export default function Page() {
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 relative">
               <Image
-                src="/logo-wildlands.png" // <— Save your transparent logo here
+                src="/logo-wildlands.png" // ← make sure this exists in /public
                 alt="Wild Lands Logo"
                 fill
                 sizes="40px"
@@ -76,7 +95,7 @@ export default function Page() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="/hero-video.mp4" // replace with your wildlife/nature footage
+          src="/hero-video.mp4" // ← add your file to /public
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 text-center max-w-3xl px-4">
@@ -94,7 +113,6 @@ export default function Page() {
           </a>
         </div>
       </section>
-
 
       {/* SERVICES */}
       <section id="services" className="bg-white">
@@ -134,7 +152,7 @@ export default function Page() {
               },
               {
                 t: "Owner’s Rep & Implementation",
-                d: "Contractor oversight, native sourcing, schedule and budget management, QA/QC in the field.",
+                d: "Contractor oversight, native sourcing, schedule/budget management, QA/QC in the field.",
               },
             ].map((card, i) => (
               <motion.div
@@ -166,12 +184,8 @@ export default function Page() {
             viewport={{ once: true }}
           >
             <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Our Values</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              Traditional Ethic.
-            </h2>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              Modern Results.
-            </h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Traditional Ethic.</h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Modern Results.</h2>
             <p className="mt-4 text-white/85">
               Wild lands are inherited lands. We combine ancestral knowledge and modern ecology to
               restore structure, reconnect water, and put disturbance back on schedule. Success is
@@ -338,7 +352,7 @@ export default function Page() {
           <motion.div
             initial={{ opacity: 0, y: reduce ? 0 : 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+            transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
             viewport={{ once: true }}
             className="aspect-[4/3] rounded-2xl bg-[url('https://images.unsplash.com/photo-1439853949127-fa647821eba0?q=80&w=1400&auto=format&fit=crop')] bg-cover bg-center shadow-xl"
           />
@@ -401,7 +415,7 @@ export default function Page() {
             <motion.div
               initial={{ opacity: 0, y: reduce ? 0 : 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: EASE, delay: 0.08 }}
+              transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.08 }}
               viewport={{ once: true }}
               className="rounded-2xl border border-white/10 bg-neutral-800"
             >
