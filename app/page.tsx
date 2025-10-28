@@ -86,10 +86,10 @@ export default function Page() {
             transition={{ type: "spring", stiffness: 120, damping: 20, mass: 0.8 }}
             viewport={{ once: true }}
           >
-            <p className="uppercase tracking-widest text-[11px] text-emerald-200 mb-3">
+            <p className="uppercase tracking-widest text-[20px] text-emerald-200 mb-3">
               Stewardship Partner • Science-Led • Field-Proven
             </p>
-            <h2 className="text-4xl md:text-6xl font-extrabold leading-tight">
+            <h2 className="text-4xl md:text-6xl font-bold leading-tight">
               Bring Your Land Back to Life
             </h2>
             <p className="mt-5 text-lg text-emerald-100 max-w-xl">
@@ -132,7 +132,7 @@ export default function Page() {
               ))}
             </div>
 
-            <p className="mt-10 text-sm text-emerald-200">
+            <p className="mt-10 text-lg text-emerald-200">
               Trusted by private landowners, <span className="font-semibold">tribal nations</span>,
               and conservation partners across the Southeast.
             </p>
@@ -220,9 +220,10 @@ export default function Page() {
             transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
           >
-            <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Our Ethic</p>
+            <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Our Values</p>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              Ancestral Respect. Modern Results.
+              Traditional Ethic. 
+              Modern Results.
             </h2>
             <p className="mt-4 text-white/85">
               Wild lands are inherited lands. We combine ancestral knowledge and modern ecology to
