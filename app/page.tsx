@@ -18,8 +18,6 @@ export default function Page() {
   const [err, setErr] = useState("");
 
   const reduce = useReducedMotion();
-
-  // Parallax refs/values for hero
   const heroRef = useRef<HTMLDivElement | null>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start end", "end start"] });
   const imgY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -40]);
@@ -60,6 +58,7 @@ export default function Page() {
           </div>
           <nav className="hidden md:flex items-center gap-8 text-sm">
             <a href="#services" className="hover:text-emerald-700">Services</a>
+            <a href="#ethic" className="hover:text-emerald-700">Our Ethic</a>
             <a href="#approach" className="hover:text-emerald-700">Approach</a>
             <a href="#work" className="hover:text-emerald-700">Projects</a>
             <a href="#about" className="hover:text-emerald-700">About</a>
@@ -69,7 +68,7 @@ export default function Page() {
             href="#contact"
             className="hidden md:inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800"
           >
-            Start a Project
+            Request a Consult
           </a>
         </div>
       </header>
@@ -84,46 +83,41 @@ export default function Page() {
             style={{ y: titleY }}
             initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{
-              type: "spring",
-              stiffness: 120,
-              damping: 20,
-              mass: 0.8,
-            }}
+            transition={{ type: "spring", stiffness: 120, damping: 20, mass: 0.8 }}
             viewport={{ once: true }}
           >
             <p className="uppercase tracking-widest text-[11px] text-emerald-200 mb-3">
-              Science-forward habitat solutions
+              Stewardship Partner • Science-Led • Field-Proven
             </p>
             <h2 className="text-4xl md:text-6xl font-extrabold leading-tight">
-              Smart, effective land and wildlife management—built on measurable results
+              Bring Your Land Back to Life
             </h2>
             <p className="mt-5 text-lg text-emerald-100 max-w-xl">
-              We plan, implement, and monitor restoration across coastal estuaries, river corridors,
-              wetlands, and upland pine–oak systems. Our team turns data into decisions—so your acres
-              return more habitat, resilience, and recreational value.
+              We restore native wildlife habitat—coastal estuaries to upland pine–oak—by pairing
+              ancestral respect and modern ecology. Plans are permit-aware, implementation is
+              hands-on, and results are measured, not assumed.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <a
                 href="#contact"
                 className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold bg-white text-emerald-900 hover:bg-emerald-50"
               >
-                Request a consult
+                Request a Consult
               </a>
               <a
-                href="#services"
+                href="#approach"
                 className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold ring-1 ring-inset ring-emerald-300 text-white/90 hover:text-white"
               >
-                Explore services
+                See Our Approach
               </a>
             </div>
 
             <div className="mt-8 grid grid-cols-2 gap-4 text-sm">
               {[
-                "Data-driven planning",
-                "Compliance-ready deliverables",
-                "Native-first design",
-                "Coastal-to-upland expertise",
+                "Native-First Design",
+                "Hydrology Leads",
+                "Active Stewardship",
+                "Measured Outcomes",
               ].map((t, i) => (
                 <motion.div
                   key={i}
@@ -140,7 +134,7 @@ export default function Page() {
 
             <p className="mt-10 text-sm text-emerald-200">
               Trusted by private landowners, <span className="font-semibold">tribal nations</span>,
-              agencies, and conservation investors across the Southeast.
+              and conservation partners across the Southeast.
             </p>
           </motion.div>
 
@@ -167,35 +161,35 @@ export default function Page() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">What we do</p>
+            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">What We Do</p>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Wildlife & Habitat Services</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                t: "Riparian & wetland restoration",
-                d: "Channel and floodplain reconnection, buffer design, wetland enhancement for waterfowl and aquatic species.",
+                t: "Riparian & Wetland Systems",
+                d: "Buffer restoration, floodplain reconnection, wetland enhancement for waterfowl and aquatic species.",
               },
               {
-                t: "Upland pine–oak savannah",
-                d: "Stand improvement, prescribed fire planning, native grass/forb establishment for game and nongame.",
+                t: "Upland Pine–Oak & Early Successional",
+                d: "Stand improvement, prescribed fire plans, native grass/forb establishment for game and nongame.",
               },
               {
-                t: "Agricultural conversions",
-                d: "From row-crop or turf to native habitat and conservation easements with funding alignment.",
+                t: "Agricultural & Post-Industrial Conversions",
+                d: "Row-crop/turf to native habitat; reforest disturbed sites; conservation easement alignment.",
               },
               {
-                t: "Post-industrial reforestation",
-                d: "Soil prep, species selection, and successional planning to return function to disturbed sites.",
+                t: "Wildlife Enterprise Planning",
+                d: "Habitat + access + guest experience for hunting, fishing, and ecotourism operations.",
               },
               {
-                t: "Wildlife enterprise planning",
-                d: "Habitat + access + experience design for hunting, fishing, and ecotourism operations.",
+                t: "Monitoring & Compliance",
+                d: "Field surveys, mapping, reporting; permit-aware specs aligned to ESA/MBTA/CWA and NRCS practices.",
               },
               {
-                t: "Monitoring & compliance",
-                d: "ESA/MBTA/CWA-aware plans, field monitoring, mapping, and reporting for agency standards.",
+                t: "Owner’s Rep & Implementation",
+                d: "Contractor oversight, native sourcing, schedule and budget management, QA/QC in the field.",
               },
             ].map((card, i) => (
               <motion.div
@@ -217,35 +211,43 @@ export default function Page() {
         </div>
       </section>
 
-      {/* VALUE PROPS / WHY US */}
-      <section className="bg-slate-900 text-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-20">
+      {/* OUR ETHIC */}
+      <section id="ethic" className="bg-slate-900 text-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 md:py-20 grid md:grid-cols-2 gap-12 items-start">
           <motion.div
             initial={{ opacity: 0, y: reduce ? 0 : 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
-            className="max-w-3xl"
           >
-            <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Why Wild Lands</p>
+            <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Our Ethic</p>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">
-              Science-led. Field-proven. Built for outcomes.
+              Ancestral Respect. Modern Results.
             </h2>
+            <p className="mt-4 text-white/85">
+              Wild lands are inherited lands. We combine ancestral knowledge and modern ecology to
+              restore structure, reconnect water, and put disturbance back on schedule. Success is
+              defined by native composition, functioning hydrology, and wildlife response—not vague greening.
+            </p>
           </motion.div>
 
-          <div className="mt-10 grid md:grid-cols-3 gap-6">
+          <div className="grid gap-4">
             {[
               {
-                t: "Measured performance",
-                d: "We define success metrics up front and report progress seasonally, so you know what your acres are producing.",
+                t: "Native-First",
+                d: "Local genotypes, community-level targets, and honest structure over cosmetic plantings.",
               },
               {
-                t: "Permitting-aware by design",
-                d: "Plans and specs align to ESA/MBTA/CWA standards and common NRCS practices to streamline funding and approvals.",
+                t: "Active Stewardship",
+                d: "Fire, thinning, disking, and hydrologic reconnection applied on purpose to guide succession.",
               },
               {
-                t: "Respect for place & people",
-                d: "We work in partnership with landowners and tribal nations to restore function while honoring cultural and working-land values.",
+                t: "Measure What Matters",
+                d: "Vegetation strata, focal species detections, water metrics, and user-day experience reported clearly.",
+              },
+              {
+                t: "Ancestral & Tribal Partnership",
+                d: "Good-faith consultation; sovereignty, cultural indicators, and data care where appropriate.",
               },
             ].map((v, i) => (
               <motion.div
@@ -274,15 +276,28 @@ export default function Page() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">How we work</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">An adaptive, investment-minded method</h2>
+            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">How We Work</p>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Plan • Implement • Maintain</h2>
+            <p className="mt-4 text-gray-700">
+              We’re a stewardship partner, not a one-and-done consultant. Clarity before action,
+              hands-on delivery, and adaptive care across seasons.
+            </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { t: "Assess", d: "On-site surveys, soils/hydrology review, and baseline wildlife/habitat inventories." },
-              { t: "Plan", d: "Scenario planning with targets, budgets, and success metrics." },
-              { t: "Implement & monitor", d: "Contractor oversight, native installs, and seasonal monitoring with annual reports." },
+              {
+                t: "Plan",
+                d: "Site walk, baseline inventory, soils and hydrology review, clear objectives, budget and schedule, permit-aware specs.",
+              },
+              {
+                t: "Implement",
+                d: "Owner’s-rep or turnkey. Contractor oversight, native sourcing, QA/QC in the field, funding and compliance alignment.",
+              },
+              {
+                t: "Maintain",
+                d: "Seasonal monitoring, burn/maintenance calendars, annual reports, mid-course corrections, and continuity.",
+              },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -312,8 +327,8 @@ export default function Page() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Selected projects</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Recent work across the Southeast</h2>
+            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Selected Projects</p>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Recent Work Across the Southeast</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -356,18 +371,18 @@ export default function Page() {
             transition={{ type: "spring", stiffness: 120, damping: 20 }}
             viewport={{ once: true }}
           >
-            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Who we are</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Biologists, builders, and good neighbors</h2>
+            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Who We Are</p>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Biologists, Builders, and Good Neighbors</h2>
             <p className="mt-4 text-gray-700">
-              Wild Lands Ecological Services is a field-first team delivering restoration and wildlife
-              management across the Southeast. We pair practical experience with rigorous monitoring—so
-              landowners, tribal nations, and partners see exactly what their investment returns in
-              habitat function and recreational value.
+              We’re a field-first team delivering practical restoration and wildlife management. Our
+              work follows a modern land ethic—respecting ancestral lands and working realities—
+              while using disturbance-based management, native seed and stock, and adaptive monitoring
+              to make acres function as habitat again.
             </p>
             <ul className="mt-6 grid gap-2 text-sm text-gray-800">
-              <li>Permitting-aware plans (ESA/MBTA/CWA)</li>
-              <li>Clear success metrics & reporting</li>
-              <li>Native species sourcing & specifications</li>
+              <li>Permit-aware plans (ESA/MBTA/CWA) with NRCS alignment</li>
+              <li>Clear success metrics and seasonal reporting</li>
+              <li>Native sourcing and specification leadership</li>
               <li>Coastal, riverine, and upland expertise</li>
             </ul>
           </motion.div>
@@ -392,8 +407,8 @@ export default function Page() {
             viewport={{ once: true }}
             className="text-center max-w-3xl mx-auto mb-12"
           >
-            <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Start a project</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Tell us about your land</h2>
+            <p className="uppercase tracking-widest text-xs text-emerald-300 mb-2">Start a Project</p>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Tell Us About Your Land</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
@@ -473,6 +488,7 @@ export default function Page() {
           <p>© {new Date().getFullYear()} Wild Lands Ecological Services. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <a href="#services" className="hover:text-emerald-700">Services</a>
+            <a href="#ethic" className="hover:text-emerald-700">Our Ethic</a>
             <a href="#approach" className="hover:text-emerald-700">Approach</a>
             <a href="#contact" className="hover:text-emerald-700">Contact</a>
           </div>
