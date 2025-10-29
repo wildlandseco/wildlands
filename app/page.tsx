@@ -31,33 +31,33 @@ export default function Page() {
 const projects = [
   {
     img: "/projects/farmland.webp",
-    title: "Farmland Renewal",
-    tag: "A cow standing in a field",
+    title: "Conservation Easements",
+    tag: "Getting landowners the most out of their farm bill benefits",
   },
   {
     img: "/projects/wetland.webp",
-    title: "Wetland Restoration",
-    tag: "A landscape with a river and trees in the background",
+    title: "Wetlands Restoration",
+    tag: "Creating and improving waterfowl habitat",
   },
   {
     img: "/projects/urban-forest.webp",
-    title: "Urban Forest Reclamation",
-    tag: "A factory with trees and houses in the foreground",
+    title: "Urban Reforestation",
+    tag: "Keep urban water clean and power bills down with new forests",
   },
   {
     img: "/projects/riparian-edge.webp",
     title: "Riparian Edge Recovery",
-    tag: "A stream with trees framing the edges and field in the background",
+    tag: "Creating bigger, healthier, more connected bottomland hardwoods in Timber stands",
   },
   {
     img: "/projects/prescribed-burn.webp",
-    title: "Prescribed Burn Operations",
-    tag: "A wildland firefighter in front of a fire with trees on the edge of the frame",
+    title: "Early Succession Management",
+    tag: "Using every tool at our disposal to put more wildlife on the land",
   },
   {
     img: "/projects/bobwhite.webp",
-    title: "Bobwhite Habitat Restoration",
-    tag: "A bobwhite quail standing on a log in a grass field",
+    title: "Habitat Improvement",
+    tag: "Bringing important game and non-game species back to your land",
   },
 ];
 
