@@ -27,6 +27,41 @@ export default function Page() {
 
   const reduce = useReducedMotion(); // ✅ respect reduced-motion
 
+  // Project images (put files in /public/projects/)
+const projects = [
+  {
+    img: "/projects/farmland.webp",
+    title: "Farmland Renewal",
+    tag: "A cow standing in a field",
+  },
+  {
+    img: "/projects/wetland.webp",
+    title: "Wetland Restoration",
+    tag: "A landscape with a river and trees in the background",
+  },
+  {
+    img: "/projects/urban-forest.webp",
+    title: "Urban Forest Reclamation",
+    tag: "A factory with trees and houses in the foreground",
+  },
+  {
+    img: "/projects/riparian-edge.webp",
+    title: "Riparian Edge Recovery",
+    tag: "A stream with trees framing the edges and field in the background",
+  },
+  {
+    img: "/projects/prescribed-burn.webp",
+    title: "Prescribed Burn Operations",
+    tag: "A wildland firefighter in front of a fire with trees on the edge of the frame",
+  },
+  {
+    img: "/projects/bobwhite.webp",
+    title: "Bobwhite Habitat Restoration",
+    tag: "A bobwhite quail standing on a log in a grass field",
+  },
+];
+
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("sending");
@@ -99,7 +134,7 @@ export default function Page() {
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 text-center max-w-3xl px-4">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-4">
+          <h2 className="text-4xl uppercase md:text-6xl font-bold tracking-tight leading-tight mb-4">
             Wild Lands
           </h2>
           <h2 className="text-3xl md:text-6xl font-semibold tracking-tight leading-tight mb-4">
@@ -283,49 +318,48 @@ export default function Page() {
       </section>
 
       {/* PROJECTS */}
-      <section id="work" className="bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
-          <motion.div
-            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 120, damping: 20 }}
-            viewport={{ once: true }}
-            className="text-center max-w-3xl mx-auto mb-12"
-          >
-            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Selected Projects</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Recent Work Across the Southeast</h2>
-          </motion.div>
+<section id="work" className="bg-white">
+  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
+    <motion.div
+      initial={{ opacity: 0, y: reduce ? 0 : 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 120, damping: 20 }}
+      viewport={{ once: true }}
+      className="text-center max-w-3xl mx-auto mb-12"
+    >
+      <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Selected Projects</p>
+      <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Recent Work Across the Southeast</h2>
+    </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { img: "https://images.unsplash.com/photo-1524790672308-46bbd6e19f5e?q=80&w=1200&auto=format&fit=crop", title: "Farmland to Easement", tag: "MS Gulf Coastal Plain" },
-              { img: "https://images.unsplash.com/photo-1465397792955-1492b20f0f53?q=80&w=1200&auto=format&fit=crop", title: "Waterfowl Wetland Enhancement", tag: "Black Belt, AL" },
-              { img: "https://images.unsplash.com/photo-1552083375-1447ce886485?q=80&w=1200&auto=format&fit=crop", title: "Post-Industrial Reforestation", tag: "Metro Atlanta, GA" },
-              { img: "https://images.unsplash.com/photo-1545243424-0ce743321e11?q=80&w=1200&auto=format&fit=crop", title: "Riparian Buffer Rebuild", tag: "Tennessee Valley" },
-              { img: "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?q=80&w=1200&auto=format&fit=crop", title: "Native Pine–Oak Savannah", tag: "Huntsville Uplands, AL" },
-              { img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?q=80&w=1200&auto=format&fit=crop", title: "Upland Quail Habitat", tag: "Appalachian Foothills" },
-            ].map((p, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.05 }}
-                viewport={{ once: true }}
-                whileHover={{ y: reduce ? 0 : -4, scale: reduce ? 1 : 1.02 }}
-                className="rounded-2xl overflow-hidden border bg-white shadow-sm"
-              >
-                <div className="aspect-[4/3] bg-gray-100">
-                  <img src={p.img} alt="Project" className="h-full w-full object-cover" />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-semibold text-base">{p.title}</h3>
-                  <p className="text-xs text-gray-600">{p.tag}</p>
-                </div>
-              </motion.div>
-            ))}
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {projects.map((p, i) => (
+        <motion.div
+          key={p.title}
+          initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.05 }}
+          viewport={{ once: true }}
+          whileHover={{ y: reduce ? 0 : -4, scale: reduce ? 1 : 1.02 }}
+          className="rounded-2xl overflow-hidden border bg-white shadow-sm"
+        >
+          <div className="aspect-[4/3] bg-gray-100 relative">
+            <Image
+              src={p.img}
+              alt={p.tag}
+              fill
+              sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+              className="object-cover"
+            />
           </div>
-        </div>
-      </section>
+          <div className="p-5">
+            <h3 className="font-semibold text-base">{p.title}</h3>
+            <p className="text-xs text-gray-600">{p.tag}</p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+</section>
 
       {/* ABOUT */}
       <section id="about" className="bg-emerald-50">
