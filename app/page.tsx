@@ -62,24 +62,40 @@ const projects = [
 ];
 
 
-  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setStatus("sending");
-    setErr("");
-    const data = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(data.entries());
+ async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  e.preventDefault();
+  setStatus("sending");
+  setErr("");
+
+  const formEl = e.currentTarget;
+  const data = new FormData(formEl);
+  const payload = Object.fromEntries(data.entries());
+
+  try {
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...payload, turnstileToken }),
     });
     const json = await res.json();
-    if (json.ok) setStatus("ok");
-    else {
-      setStatus("error");
-      setErr(json.error || "Submission failed");
+
+    if (json.ok) {
+      setStatus("ok");
+      formEl.reset();        // ✅ clear inputs
+      setTurnstileToken(""); // ✅ clear Turnstile token so a new verify is required
+      // Optional: auto-hide success after a few seconds:
+      // setTimeout(() => setStatus("idle"), 5000);
+      return;
     }
+
+    setStatus("error");
+    setErr(json.error || "Submission failed");
+  } catch {
+    setStatus("error");
+    setErr("Network error. Please try again.");
   }
+}
+
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
@@ -424,21 +440,24 @@ const projects = [
                   <input name="email" type="email" placeholder="Email" required className="border p-3 rounded" />
                   <input name="phone" placeholder="Phone" className="border p-3 rounded" />
                   <input name="location" placeholder="Property location (city, state)" className="border p-3 rounded" />
+                  <input type="text" name="hp" tabIndex={-1} autoComplete="off" className="hidden"/>
+
                   <textarea
                     name="message"
                     placeholder="Goals & challenges (e.g., quail habitat, wetland enhancement, easement)"
                     rows={5}
                     className="border p-3 rounded"
+
+                    
                   />
                   <Turnstile
                     siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string}
                     onVerify={setTurnstileToken}
                   />
                   <button
-                    disabled={!turnstileToken || status === "sending"}
-                    className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800"
-                  >
-                    {status === "sending" ? "Sending…" : "Submit"}
+                  disabled={!turnstileToken || status === "sending" || status === "ok"}
+                  className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-60">
+                    {status === "sending" ? "Sending…" : status === "ok" ? "Sent ✓" : "Submit"}
                   </button>
                   {status === "ok" && <p className="text-emerald-700">Thanks — we’ll be in touch shortly.</p>}
                   {status === "error" && <p className="text-red-600">There was a problem: {err}</p>}
