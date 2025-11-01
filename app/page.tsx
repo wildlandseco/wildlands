@@ -387,7 +387,7 @@ const projects = [
             viewport={{ once: true }}
           >
             <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Who We Are</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Biologists, Builders, and Good Neighbors</h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Biologists, Hunters, and Good Neighbors</h2>
             <p className="mt-4 text-gray-700">
               We’re a field-first team delivering practical restoration and wildlife management. Our
               work follows a modern land ethic—respecting ancestral lands and working realities—
