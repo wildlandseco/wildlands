@@ -403,12 +403,20 @@ const projects = [
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: reduce ? 0 : 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
-            viewport={{ once: true }}
-            className="aspect-[4/3] rounded-2xl bg-[url('https://images.unsplash.com/photo-1439853949127-fa647821eba0?q=80&w=1400&auto=format&fit=crop')] bg-cover bg-center shadow-xl"
-          />
+  initial={{ opacity: 0, y: reduce ? 0 : 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
+  viewport={{ once: true }}
+  className="rounded-2xl overflow-hidden shadow-xl"
+>
+  <Image
+    src="/who-we-are.jpg"
+    alt="Wild Lands field team on site"
+    width={1400}
+    height={1050}
+    className="object-cover w-full h-full"
+  />
+</motion.div>
         </div>
       </section>
 
