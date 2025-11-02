@@ -393,7 +393,7 @@ export default function Page() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
             viewport={{ once: true }}
-            className="aspect-[4/3] rounded-2xl bg-[url('/about-hero.jpg')] bg-cover bg-center shadow-xl"
+            className="aspect-[4/3] rounded-2xl bg-[url('/who-we-are.jpg')] bg-cover bg-center shadow-xl"
           />
         </div>
       </section>
