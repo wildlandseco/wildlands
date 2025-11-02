@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { motion, useReducedMotion } from "framer-motion"; // ✅ animations
+import { motion, useReducedMotion } from "framer-motion";
 import Turnstile from "@/components/Turnstile";
 
 /** Sticky CTA used at the bottom of the page */
@@ -25,77 +25,60 @@ export default function Page() {
   const [status, setStatus] = useState<"idle" | "sending" | "ok" | "error">("idle");
   const [err, setErr] = useState("");
 
-  const reduce = useReducedMotion(); // ✅ respect reduced-motion
+  const reduce = useReducedMotion();
 
   // Project images (put files in /public/projects/)
-const projects = [
-  {
-    img: "/projects/farmland.webp",
-    title: "Conservation Easements",
-    tag: "Getting landowners the most out of their farm bill benefits",
-  },
-  {
-    img: "/projects/wetland.webp",
-    title: "Wetlands Restoration",
-    tag: "Creating and improving waterfowl habitat",
-  },
-  {
-    img: "/projects/urban-forest.webp",
-    title: "Urban Reforestation",
-    tag: "Keep urban water clean and power bills down with new forests",
-  },
-  {
-    img: "/projects/riparian-edge.webp",
-    title: "Riparian Edge Recovery",
-    tag: "Creating bigger, healthier, more connected bottomland hardwoods in Timber stands",
-  },
-  {
-    img: "/projects/prescribed-burn.webp",
-    title: "Early Succession Management",
-    tag: "Using every tool at our disposal to put more wildlife on the land",
-  },
-  {
-    img: "/projects/bobwhite.webp",
-    title: "Habitat Improvement",
-    tag: "Bringing important game and non-game species back to your land",
-  },
-];
+  const projects = [
+    {
+      img: "/projects/farmland.webp",
+      title: "Conservation Easements",
+      tag: "Getting landowners the most out of their farm bill benefits",
+    },
+    {
+      img: "/projects/wetland.webp",
+      title: "Wetlands Restoration",
+      tag: "Creating and improving waterfowl habitat",
+    },
+    {
+      img: "/projects/urban-forest.webp",
+      title: "Urban Reforestation",
+      tag: "Keep urban water clean and power bills down with new forests",
+    },
+    {
+      img: "/projects/riparian-edge.webp",
+      title: "Riparian Edge Recovery",
+      tag: "Creating bigger, healthier, more connected bottomland hardwoods in timber stands",
+    },
+    {
+      img: "/projects/prescribed-burn.webp",
+      title: "Early Succession Management",
+      tag: "Using every tool at our disposal to put more wildlife on the land",
+    },
+    {
+      img: "/projects/bobwhite.webp",
+      title: "Habitat Improvement",
+      tag: "Bringing important game and non-game species back to your land",
+    },
+  ];
 
-
- async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
-  e.preventDefault();
-  setStatus("sending");
-  setErr("");
-
-  const formEl = e.currentTarget;
-  const data = new FormData(formEl);
-  const payload = Object.fromEntries(data.entries());
-
-  try {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setStatus("sending");
+    setErr("");
+    const data = new FormData(e.currentTarget);
+    const payload = Object.fromEntries(data.entries());
     const res = await fetch("/api/contact", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...payload, turnstileToken }),
     });
     const json = await res.json();
-
-    if (json.ok) {
-      setStatus("ok");
-      formEl.reset();        // ✅ clear inputs
-      setTurnstileToken(""); // ✅ clear Turnstile token so a new verify is required
-      // Optional: auto-hide success after a few seconds:
-      // setTimeout(() => setStatus("idle"), 5000);
-      return;
+    if (json.ok) setStatus("ok");
+    else {
+      setStatus("error");
+      setErr(json.error || "Submission failed");
     }
-
-    setStatus("error");
-    setErr(json.error || "Submission failed");
-  } catch {
-    setStatus("error");
-    setErr("Network error. Please try again.");
   }
-}
-
 
   return (
     <div className="min-h-screen bg-white text-neutral-900">
@@ -106,7 +89,7 @@ const projects = [
           <div className="flex items-center gap-3">
             <div className="h-12 w-12 relative">
               <Image
-                src="/logo-wildlands.png" // ← make sure this exists in /public
+                src="/logo-wildlands.png"
                 alt="Wild Lands Logo"
                 fill
                 sizes="80px"
@@ -146,7 +129,7 @@ const projects = [
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="/hero-video.mp4" // ← add your file to /public
+          src="/hero-video.mp4"
         />
         <div className="absolute inset-0 bg-black/40" />
         <div className="relative z-10 text-center max-w-3xl px-4">
@@ -157,7 +140,8 @@ const projects = [
             Ecological Services
           </h2>
           <p className="text-lg md:text-xl text-emerald-100 mb-8">
-            Stewardship rooted in native ecology — helping landowners, tribes, and partners restore balance to their landscapes.
+            Guided by a living land ethic, we help landowners, tribes, and partners restore balance to the land—
+            rebuilding native systems while keeping working lands productive and wild places alive for both people and wildlife.
           </p>
           <a
             href="#contact"
@@ -186,27 +170,27 @@ const projects = [
             {[
               {
                 t: "Riparian & Wetland Systems",
-                d: "Buffer restoration, floodplain reconnection, wetland enhancement for waterfowl and aquatic species.",
+                d: "Buffer restoration, floodplain reconnection, and wetland enhancement to restore function and improve habitat for aquatic species and waterfowl.",
               },
               {
-                t: "Upland Pine–Oak & Early Successional",
-                d: "Stand improvement, prescribed fire plans, native grass/forb establishment for game and nongame.",
+                t: "Upland Habitat Restoration",
+                d: "Selective thinning, prescribed fire planning, and native groundcover establishment to benefit quail, turkey, deer, songbirds, and pollinators.",
               },
               {
                 t: "Agricultural & Post-Industrial Conversions",
-                d: "Row-crop/turf to native habitat; reforest disturbed sites; conservation easement alignment.",
+                d: "Transition row-crop or turf to native habitat; reforest disturbed sites; align projects with easements, incentives, and long-term stewardship goals.",
               },
               {
                 t: "Wildlife Enterprise Planning",
-                d: "Habitat + access + guest experience for hunting, fishing, and ecotourism operations.",
+                d: "Integrate habitat design, access, and user experience for hunting, fishing, and ecotourism—grounded in ecological performance and safety.",
               },
               {
                 t: "Monitoring & Compliance",
-                d: "Field surveys, mapping, reporting; permit-aware specs aligned to ESA/MBTA/CWA and NRCS practices.",
+                d: "Permit-aware specs (ESA/MBTA/CWA), field surveys, mapping, and clear reporting aligned with NRCS practices and agency standards.",
               },
               {
                 t: "Owner’s Rep & Implementation",
-                d: "Contractor oversight, native sourcing, schedule/budget management, QA/QC in the field.",
+                d: "Contractor oversight, native sourcing, schedule and budget management, and QA/QC—delivering the plan on the ground.",
               },
             ].map((card, i) => (
               <motion.div
@@ -241,9 +225,11 @@ const projects = [
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Traditional Ethic.</h2>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Modern Results.</h2>
             <p className="mt-4 text-white/85">
-              Wild lands are inherited lands. We combine ancestral knowledge and modern ecology to
-              restore structure, reconnect water, and put disturbance back on schedule. Success is
-              defined by native composition, functioning hydrology, and wildlife response—not vague greening.
+              Wild lands are inherited lands—places of use, renewal, and responsibility.
+              Our work blends traditional stewardship and ecological science to restore structure,
+              reconnect water, and return natural disturbance to its rhythm. We measure success by
+              function: native composition, clean water, abundant wildlife, and a landscape that still
+              provides for those who depend on it.
             </p>
           </motion.div>
 
@@ -251,11 +237,11 @@ const projects = [
             {[
               {
                 t: "Native-First",
-                d: "Local genotypes, community-level targets, and honest structure over cosmetic plantings.",
+                d: "Local genotypes, community-level targets, and honest structure—not cosmetic plantings.",
               },
               {
                 t: "Active Stewardship",
-                d: "Fire, thinning, disking, and hydrologic reconnection applied on purpose to guide succession.",
+                d: "Fire, thinning, disking, and hydrologic reconnection—applied on purpose to guide succession.",
               },
               {
                 t: "Measure What Matters",
@@ -295,8 +281,9 @@ const projects = [
             <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">How We Work</p>
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Plan • Implement • Maintain</h2>
             <p className="mt-4 text-gray-700">
-              We’re a stewardship partner, not a one-and-done consultant. Clarity before action,
-              hands-on delivery, and adaptive care across seasons.
+              Every plan we write is guided by a simple principle: healthy land serves all.
+              We balance ecological restoration with continued use—bringing together science, tradition,
+              and the landowner’s goals to create resilient habitat and lasting value.
             </p>
           </motion.div>
 
@@ -334,48 +321,48 @@ const projects = [
       </section>
 
       {/* PROJECTS */}
-<section id="work" className="bg-white">
-  <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
-    <motion.div
-      initial={{ opacity: 0, y: reduce ? 0 : 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ type: "spring", stiffness: 120, damping: 20 }}
-      viewport={{ once: true }}
-      className="text-center max-w-3xl mx-auto mb-12"
-    >
-      <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Selected Projects</p>
-      <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Recent Work Across the Southeast</h2>
-    </motion.div>
+      <section id="work" className="bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-18 md:py-24">
+          <motion.div
+            initial={{ opacity: 0, y: reduce ? 0 : 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 120, damping: 20 }}
+            viewport={{ once: true }}
+            className="text-center max-w-3xl mx-auto mb-12"
+          >
+            <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Selected Projects</p>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Recent Work Across the Southeast</h2>
+          </motion.div>
 
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.map((p, i) => (
-        <motion.div
-          key={p.title}
-          initial={{ opacity: 0, y: reduce ? 0 : 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.05 }}
-          viewport={{ once: true }}
-          whileHover={{ y: reduce ? 0 : -4, scale: reduce ? 1 : 1.02 }}
-          className="rounded-2xl overflow-hidden border bg-white shadow-sm"
-        >
-          <div className="aspect-[4/3] bg-gray-100 relative">
-            <Image
-              src={p.img}
-              alt={p.tag}
-              fill
-              sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
-              className="object-cover"
-            />
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((p, i) => (
+              <motion.div
+                key={p.title}
+                initial={{ opacity: 0, y: reduce ? 0 : 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.05 }}
+                viewport={{ once: true }}
+                whileHover={{ y: reduce ? 0 : -4, scale: reduce ? 1 : 1.02 }}
+                className="rounded-2xl overflow-hidden border bg-white shadow-sm"
+              >
+                <div className="aspect-[4/3] bg-gray-100 relative">
+                  <Image
+                    src={p.img}
+                    alt={p.tag}
+                    fill
+                    sizes="(min-width:1024px) 33vw, (min-width:768px) 50vw, 100vw"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="p-5">
+                  <h3 className="font-semibold text-base">{p.title}</h3>
+                  <p className="text-xs text-gray-600">{p.tag}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-          <div className="p-5">
-            <h3 className="font-semibold text-base">{p.title}</h3>
-            <p className="text-xs text-gray-600">{p.tag}</p>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  </div>
-</section>
+        </div>
+      </section>
 
       {/* ABOUT */}
       <section id="about" className="bg-emerald-50">
@@ -387,36 +374,27 @@ const projects = [
             viewport={{ once: true }}
           >
             <p className="uppercase tracking-widest text-xs text-emerald-700 mb-2">Who We Are</p>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Biologists, Hunters, and Good Neighbors</h2>
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight">Biologists, Builders, and Good Neighbors</h2>
             <p className="mt-4 text-gray-700">
-              We’re a field-first team delivering practical restoration and wildlife management. Our
-              work follows a modern land ethic—respecting ancestral lands and working realities—
-              while using disturbance-based management, native seed and stock, and adaptive monitoring
-              to make acres function as habitat again.
+              Our work follows a practical land ethic—rooted in respect for ancestral lands and today’s working realities.
+              Using disturbance-based management, native species, and adaptive monitoring, we help acres function again
+              as living habitat—places that sustain wildlife, water, and people.
             </p>
             <ul className="mt-6 grid gap-2 text-sm text-gray-800">
               <li>Permit-aware plans (ESA/MBTA/CWA) with NRCS alignment</li>
               <li>Clear success metrics and seasonal reporting</li>
               <li>Native sourcing and specification leadership</li>
-              <li>Coastal, riverine, and upland expertise</li>
+              <li>Coastal, riparian, and upland expertise</li>
             </ul>
           </motion.div>
 
           <motion.div
-  initial={{ opacity: 0, y: reduce ? 0 : 30 }}
-  whileInView={{ opacity: 1, y: 0 }}
-  transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
-  viewport={{ once: true }}
-  className="rounded-2xl overflow-hidden shadow-xl"
->
-  <Image
-    src="/who-we-are.jpg"
-    alt="Wild Lands field team on site"
-    width={1400}
-    height={1050}
-    className="object-cover w-full h-full"
-  />
-</motion.div>
+            initial={{ opacity: 0, y: reduce ? 0 : 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ type: "spring", stiffness: 120, damping: 20, delay: 0.1 }}
+            viewport={{ once: true }}
+            className="aspect-[4/3] rounded-2xl bg-[url('/about-hero.jpg')] bg-cover bg-center shadow-xl"
+          />
         </div>
       </section>
 
@@ -448,24 +426,23 @@ const projects = [
                   <input name="email" type="email" placeholder="Email" required className="border p-3 rounded" />
                   <input name="phone" placeholder="Phone" className="border p-3 rounded" />
                   <input name="location" placeholder="Property location (city, state)" className="border p-3 rounded" />
-                  <input type="text" name="hp" tabIndex={-1} autoComplete="off" className="hidden"/>
-
+                  {/* Honeypot */}
+                  <input type="text" name="hp" tabIndex={-1} autoComplete="off" className="hidden" />
                   <textarea
                     name="message"
                     placeholder="Goals & challenges (e.g., quail habitat, wetland enhancement, easement)"
                     rows={5}
                     className="border p-3 rounded"
-
-                    
                   />
                   <Turnstile
                     siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string}
                     onVerify={setTurnstileToken}
                   />
                   <button
-                  disabled={!turnstileToken || status === "sending" || status === "ok"}
-                  className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800 disabled:opacity-60">
-                    {status === "sending" ? "Sending…" : status === "ok" ? "Sent ✓" : "Submit"}
+                    disabled={!turnstileToken || status === "sending"}
+                    className="inline-flex items-center justify-center rounded-xl px-5 py-3 text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800"
+                  >
+                    {status === "sending" ? "Sending…" : "Submit"}
                   </button>
                   {status === "ok" && <p className="text-emerald-700">Thanks — we’ll be in touch shortly.</p>}
                   {status === "error" && <p className="text-red-600">There was a problem: {err}</p>}
@@ -498,7 +475,7 @@ const projects = [
                 </div>
                 <div>
                   <p className="font-medium text-white">Service area</p>
-                  <p className="text-emerald-200">Southeastern U.S. • Coastal to upland systems</p>
+                  <p className="text-emerald-200">Southeastern U.S. • Coastal, riparian, and upland habitat</p>
                 </div>
               </div>
             </motion.div>
