@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const siteName = "Wild Lands Ecological Services";
 const siteUrl  = "https://wildlandseco.com";
@@ -50,7 +51,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               logo: `${siteUrl}/logo-wildlands.png`,
               description: siteDesc,
               areaServed: "US-Southeast",
-              // add your social/dir profiles when you have them
               sameAs: [],
               contactPoint: [
                 {
@@ -65,7 +65,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body>{children}</body>
+      <body className="bg-neutral-50">
+        <Navbar />
+        {children}
+      </body>
     </html>
   );
 }
