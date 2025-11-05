@@ -16,7 +16,7 @@ export default function NewProjectPage() {
 
 async function createProject(formData: FormData) {
   "use server";
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/portal/login");
 

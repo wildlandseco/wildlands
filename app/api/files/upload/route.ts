@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const project = url.searchParams.get('project')
   if (!project) return NextResponse.json({ ok:false, error:'Missing project' }, { status:400 })
 
-  const supabase = supabaseServer()
+  const supabase = await supabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ ok:false, error:'Unauthorized' }, { status:401 })
 

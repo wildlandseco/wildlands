@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const path = url.searchParams.get('path')
   if (!path) return NextResponse.json({ ok:false, error:'Missing path' }, { status:400 })
 
-  const supabase = supabaseServer()
+  const supabase = await supabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ ok:false, error:'Unauthorized' }, { status:401 })
 

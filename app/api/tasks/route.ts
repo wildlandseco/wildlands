@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   const title = String(form.get('title') || '').slice(0,200)
   const details = String(form.get('details') || '').slice(0,5000)
 
-  const supabase = supabaseServer()
+  const supabase = await supabaseServer()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ ok:false, error:'Unauthorized' }, { status:401 })
 

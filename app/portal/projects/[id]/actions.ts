@@ -10,7 +10,7 @@ export async function applyPlaybook(formData: FormData) {
   const projectId = (formData.get("project_id") as string) || "";
   if (!projectId) redirect(`/portal/projects?seed=err`);
 
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   try {
     const tasksSeed = [

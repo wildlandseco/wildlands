@@ -2,7 +2,7 @@ import { supabaseServer } from "@/lib/supabaseServer";
 import { redirect } from "next/navigation";
 
 export default async function EditProject({ params }: { params: { id: string } }) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const { data: p } = await supabase.from("projects")
     .select("id,title,location,acreage,objective,status")
     .eq("id", params.id).single();
@@ -29,7 +29,7 @@ export default async function EditProject({ params }: { params: { id: string } }
 
 async function update(formData: FormData) {
   "use server";
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const id = String(formData.get("id"));
   const title = String(formData.get("title") || "").slice(0,200);
   const location = String(formData.get("location") || "").slice(0,200);

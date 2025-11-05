@@ -5,7 +5,7 @@ import { applyPlaybook } from "./actions";
 import { supabaseServer } from "@/lib/supabaseServer";
 
 export default async function ProjectPage({ params }: { params: { id: string } }) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
 
   const { data: project } = await supabase
     .from("projects")
