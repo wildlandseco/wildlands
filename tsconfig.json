@@ -21,7 +21,10 @@
     "paths": {
       "@/*": [
         "./*"
-      ]
+      ],
+      "contentlayer/generated": [".contentlayer/generated"]
+    },
+    "types": ["contentlayer/generated"]
     },
     "incremental": true,
     "plugins": [
@@ -29,7 +32,7 @@
         "name": "next"
       }
     ]
-  },
+  ,
   "include": [
     "next-env.d.ts",
     "**/*.ts",
