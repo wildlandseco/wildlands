@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import Turnstile from "@/components/Turnstile";
@@ -17,6 +17,98 @@ function StickyCTA() {
         </a>
       </div>
     </div>
+  );
+}
+
+/** HERO SECTION (Video Background) — motion-safe */
+function Hero() {
+  const reduce = useReducedMotion();
+  const vidRef = useRef<HTMLVideoElement | null>(null);
+  const [playing, setPlaying] = useState(true);
+
+  useEffect(() => {
+    const v = vidRef.current;
+    if (!v) return;
+
+    if (reduce) {
+      v.pause();
+      v.currentTime = 0;
+      setPlaying(false);
+    } else {
+      v.playbackRate = 0.75; // gentle playback
+      v.play().catch(() => {});
+      setPlaying(true);
+    }
+  }, [reduce]);
+
+  const togglePlay = () => {
+    const v = vidRef.current;
+    if (!v) return;
+    if (v.paused) {
+      v.play().catch(() => {});
+      setPlaying(true);
+    } else {
+      v.pause();
+      setPlaying(false);
+    }
+  };
+
+  return (
+    <section className="relative h-[90vh] overflow-hidden flex items-center justify-center text-white motion-reduce:transform-none motion-reduce:transition-none">
+      {reduce ? (
+        <Image
+          src="/hero-fallback.jpg" // add a still image to /public
+          alt="Native habitat"
+          fill
+          priority
+          sizes="100vw"
+          className="absolute inset-0 object-cover"
+        />
+      ) : (
+        <video
+          ref={vidRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster="/hero-fallback.jpg"
+          className="absolute inset-0 w-full h-full object-cover"
+          src="/hero-video.mp4"
+          aria-hidden
+        />
+      )}
+
+      <div className="absolute inset-0 bg-black/50" />
+
+      <div className="relative z-10 text-center max-w-3xl px-4">
+        <h2 className="text-4xl uppercase md:text-6xl font-bold tracking-tight leading-tight mb-4">
+          Wild Lands
+        </h2>
+        <h2 className="text-3xl md:text-6xl font-semibold tracking-tight leading-tight mb-4">
+          Ecological Services
+        </h2>
+        <p className="text-lg md:text-xl text-emerald-100 mb-8">
+          Guided by a living land ethic, we help landowners, tribes, and partners restore balance to the land—
+          rebuilding native systems while keeping working lands productive and wild places alive for both people and wildlife.
+        </p>
+        <div className="flex items-center justify-center gap-3">
+          <a
+            href="#contact"
+            className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-emerald-700 text-white font-semibold text-sm hover:bg-emerald-800"
+          >
+            Start Your Project
+          </a>
+          <button
+            type="button"
+            onClick={togglePlay}
+            className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold border border-white/70 bg-white/10 hover:bg-white/20"
+          >
+            {playing ? "Pause Video" : "Play Video"}
+          </button>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -84,38 +176,10 @@ export default function Page() {
     <div className="min-h-screen bg-white text-neutral-900">
       {/* Header */}
       <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-neutral-200">
-           </header>
+      </header>
 
-      {/* HERO SECTION (Video Background) */}
-      <section className="relative h-[90vh] overflow-hidden flex items-center justify-center text-white">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          src="/hero-video.mp4"
-        />
-        <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 text-center max-w-3xl px-4">
-          <h2 className="text-4xl uppercase md:text-6xl font-bold tracking-tight leading-tight mb-4">
-            Wild Lands
-          </h2>
-          <h2 className="text-3xl md:text-6xl font-semibold tracking-tight leading-tight mb-4">
-            Ecological Services
-          </h2>
-          <p className="text-lg md:text-xl text-emerald-100 mb-8">
-            Guided by a living land ethic, we help landowners, tribes, and partners restore balance to the land—
-            rebuilding native systems while keeping working lands productive and wild places alive for both people and wildlife.
-          </p>
-          <a
-            href="#contact"
-            className="inline-flex items-center justify-center rounded-xl px-6 py-3 bg-emerald-700 text-white font-semibold text-sm hover:bg-emerald-800"
-          >
-            Start Your Project
-          </a>
-        </div>
-      </section>
+      {/* HERO SECTION */}
+      <Hero />
 
       {/* SERVICES */}
       <section id="services" className="bg-white">
@@ -164,7 +228,7 @@ export default function Page() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.06 }}
                 viewport={{ once: true }}
-                whileHover={{ y: reduce ? 0 : -2, scale: reduce ? 1 : 1.01 }}
+                whileHover={reduce ? {} : { y: -2, scale: 1.01 }}
                 className="rounded-2xl border bg-white shadow-sm"
               >
                 <div className="p-6">
@@ -307,7 +371,7 @@ export default function Page() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ type: "spring", stiffness: 140, damping: 18, delay: i * 0.05 }}
                 viewport={{ once: true }}
-                whileHover={{ y: reduce ? 0 : -4, scale: reduce ? 1 : 1.02 }}
+                whileHover={reduce ? {} : { y: -4, scale: 1.02 }}
                 className="rounded-2xl overflow-hidden border bg-white shadow-sm"
               >
                 <div className="aspect-[4/3] bg-gray-100 relative">
