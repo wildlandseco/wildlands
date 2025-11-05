@@ -72,7 +72,7 @@ function addDays(base: Date, n?: number) {
 /** ----- Page ----- **/
 
 export default async function PlaybooksPage({ params }: { params: { id: string } }) {
-  const supabase = supabaseServer();
+  const supabase = await supabaseServer();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) redirect("/portal/login");
 
