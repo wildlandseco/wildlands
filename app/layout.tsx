@@ -1,4 +1,3 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -41,7 +40,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* JSON-LD: Organization */}
         <script
           type="application/ld+json"
-          // NOTE: don’t interpolate user input here
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -65,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="bg-neutral-50">
+      <body className="bg-white text-neutral-900">
         <Navbar />
         {children}
       </body>
