@@ -87,7 +87,7 @@ export default async function PlaybooksPage({ params }: { params: { id: string }
 
   async function applyPlaybook(formData: FormData) {
     "use server";
-    const supa = supabaseServer();
+    const supa = await supabaseServer();
     const key = String(formData.get("key"));
     const projectId = String(formData.get("projectId"));
     const today = new Date();
