@@ -11,7 +11,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "forceConsistentCasingInFileNames": true,
 
     "baseUrl": ".",
@@ -20,12 +20,10 @@
       "contentlayer/generated": ["./.contentlayer/generated"]
     },
 
-    "types": ["node", "contentlayer/generated"],
+    "types": ["node"],             // ⬅️ remove contentlayer/generated here
     "incremental": true,
 
-    "plugins": [
-      { "name": "next" }
-    ]
+    "plugins": [{ "name": "next" }]
   },
   "include": [
     "next-env.d.ts",
@@ -33,7 +31,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    ".contentlayer/generated"
+    ".contentlayer/generated"       // ⬅️ keep the generated dir included
   ],
   "exclude": ["node_modules"]
 }
