@@ -1,6 +1,6 @@
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
-import { useMDXComponent } from "next-contentlayer/hooks";
+import { useMDXComponent } from "contentlayer/hooks";
 import Link from "next/link";
 
 export const dynamic = "error"; // ensure static generation on Vercel
