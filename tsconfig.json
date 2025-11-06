@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "es2022"
-    ],
+    "lib": ["dom", "dom.iterable", "es2022"],
     "allowJs": false,
     "skipLibCheck": true,
     "strict": true,
@@ -15,24 +11,22 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "forceConsistentCasingInFileNames": true,
+
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./*"
-      ],
+      "@/*": ["./*"],
       "contentlayer/generated": ["./.contentlayer/generated"]
     },
-    "types": ["contentlayer/generated"]
-    },
+
+    "types": ["node", "contentlayer/generated"],
     "incremental": true,
+
     "plugins": [
-      {
-        "name": "next"
-      }
+      { "name": "next" }
     ]
-  ,
+  },
   "include": [
     "next-env.d.ts",
     "**/*.ts",
@@ -41,7 +35,5 @@
     ".next/dev/types/**/*.ts",
     ".contentlayer/generated"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
