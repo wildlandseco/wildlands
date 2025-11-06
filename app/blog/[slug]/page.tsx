@@ -8,34 +8,33 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
-export const dynamic = "force-static";   // SSG
-export const dynamicParams = true;       // allow non-listed params during dev; prod uses params below
-export const revalidate = false;         // fully static
+export const dynamic = "force-static"; // SSG
+export const dynamicParams = false;    // only slugs returned below are valid in prod
+export const revalidate = false;
 
 type Params = { slug: string };
 
-function getPostBySlug(slug: string) {
-  return allPosts.find((p) => p.slug === slug && !p.draft);
-}
+const POSTS = allPosts.filter((p) => !p.draft);
 
+// --- SSG params ---
 export function generateStaticParams() {
-  return allPosts
-    .filter((p) => !p.draft)
-    .map((p) => ({ slug: p.slug }));
+  return POSTS.map((p) => ({ slug: p.slug }));
 }
 
+// --- Metadata ---
 export function generateMetadata({ params }: { params: Params }) {
-  const post = getPostBySlug(params.slug);
+  const post = POSTS.find((p) => p.slug === params.slug);
   if (!post) return {};
   const images = post.thumbnail ? [post.thumbnail] : post.image ? [post.image] : [];
   return {
     title: post.title,
     description: post.description || post.summary,
     openGraph: { title: post.title, description: post.description || post.summary, type: "article", url: `/blog/${post.slug}`, images },
-    twitter: { card: images.length ? "summary_large_image" : "summary", title: post.title, description: post.description || post.summary, images },
+    twitter: { card: images.length ? "summary_large_image" : "summary", title: post.title, description: post.description || post.summary, images }
   };
 }
 
+// --- MDX components (keep yours if you like) ---
 const MDXComponents: Record<string, React.ComponentType<any>> = {
   a: (props) => (
     <a
@@ -51,19 +50,11 @@ const MDXComponents: Record<string, React.ComponentType<any>> = {
   h3: (props) => <h3 {...props} className="mt-8 scroll-mt-24 text-xl font-semibold" />,
   ul: (props) => <ul {...props} className="list-disc pl-6" />,
   ol: (props) => <ol {...props} className="list-decimal pl-6" />,
-  blockquote: (props) => <blockquote {...props} className="border-l-4 border-emerald-600/40 pl-4 italic text-gray-700" />,
+  blockquote: (props) => <blockquote {...props} className="border-l-4 border-emerald-600/40 pl-4 italic text-gray-700" />
 };
 
-function fmtDate(d: string | Date) {
-  try {
-    return new Date(d).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
-  } catch {
-    return String(d);
-  }
-}
-
 export default function PostPage({ params }: { params: Params }) {
-  const post = getPostBySlug(params.slug);
+  const post = POSTS.find((p) => p.slug === params.slug);
   if (!post) return notFound();
 
   return (
@@ -81,14 +72,14 @@ export default function PostPage({ params }: { params: Params }) {
         <h1 className="text-3xl md:text-5xl font-bold tracking-tight">{post.title}</h1>
 
         <div className="mt-3 text-sm text-gray-600 flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span>{fmtDate(post.date)}</span>
+          <span>{new Date(post.date).toLocaleDateString()}</span>
           {post.author && (<><span className="text-gray-300">•</span><span>{post.author}</span></>)}
-          {typeof post.readingTime === "number" || post.readingTimeMinutes ? (
+          {(typeof post.readingTime === "number" || post.readingTimeMinutes) && (
             <>
               <span className="text-gray-300">•</span>
               <span>{Math.max(1, Math.ceil((post.readingTime as number) || post.readingTimeMinutes || 0))} min read</span>
             </>
-          ) : null}
+          )}
         </div>
 
         {(post.thumbnail || post.image) && (
@@ -107,8 +98,8 @@ export default function PostPage({ params }: { params: Params }) {
             options={{
               mdxOptions: {
                 remarkPlugins: [remarkGfm],
-                rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: "wrap" }]],
-              },
+                rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: "wrap" }]]
+              }
             }}
           />
         </div>
