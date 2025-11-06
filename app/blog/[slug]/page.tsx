@@ -61,7 +61,7 @@ export default function PostPage({ params }: { params: Params }) {
     <article className="bg-white">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
         <nav className="mb-6 text-sm">
-          <Link href="/blog" className="text-emerald-700 hover:underline">Blog</Link>
+          <Link key={p.slug} href={`/blog/${p.slug}`} className="text-emerald-700 hover:underline">Blog</Link>
           <span className="mx-2 text-gray-400">/</span>
           <span className="text-gray-700">{post.title}</span>
         </nav>

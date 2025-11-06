@@ -31,17 +31,17 @@ export default function Navbar() {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <a href="#services" className="hover:text-emerald-700">Services</a>
-          <a href="#approach" className="hover:text-emerald-700">Approach</a>
-          <a href="#work" className="hover:text-emerald-700">Projects</a>
-          <a href="#about" className="hover:text-emerald-700">About</a>
+          <a href="/#services" className="hover:text-emerald-700">Services</a>
+          <a href="/#approach" className="hover:text-emerald-700">Approach</a>
+          <a href="/#work" className="hover:text-emerald-700">Projects</a>
+          <a href="/#about" className="hover:text-emerald-700">About</a>
           <a href="/blog" className="hover:text-emerald-700">Knowledge</a>
-          <a href="#contact" className="hover:text-emerald-700">Contact</a>
+          <a href="/#contact" className="hover:text-emerald-700">Contact</a>
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
           <a
-            href="#contact"
+            href="/#contact"
             className="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold bg-emerald-700 text-white hover:bg-emerald-800"
           >
             Request a Consult
