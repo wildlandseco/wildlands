@@ -1,6 +1,9 @@
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
-import { useMDXComponent } from "contentlayer/hooks";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import Link from "next/link";
 
 export const dynamic = "error"; // ensure static generation on Vercel
@@ -156,8 +159,15 @@ export default function BlogPostPage({ params }: { params: Params }) {
 
         {/* Content */}
         <div className="prose prose-emerald max-w-none prose-headings:scroll-mt-24 mt-8">
-          <MDX components={MDXComponents} />
-        </div>
+<MDXRemote 
+source={post.body.raw}
+components={MDXComponents}
+options={{
+  mdxOptions: {remarkPlugins: [remarkGfm],
+    rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: "wrap" }]],
+  },
+}}/>
+</div>
 
         {/* Footer nav */}
         <div className="mt-12 border-t pt-6">
