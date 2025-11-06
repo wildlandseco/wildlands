@@ -14,11 +14,7 @@ export default function BlogIndex() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {posts.map((p) => (
-            <Link
-              key={p.slug}
-              href={p.url}
-              className="rounded-2xl overflow-hidden border bg-white shadow-sm hover:border-emerald-300"
-            >
+            <Link key={p.slug} href={`/blog/${p.slug}`} className="rounded-2xl overflow-hidden border bg-white shadow-sm hover:border-emerald-300">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               {p.thumbnail || p.image ? (
                 <img
