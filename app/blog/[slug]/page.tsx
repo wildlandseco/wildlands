@@ -2,65 +2,42 @@
 import { allPosts } from "contentlayer/generated";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
-export const dynamic = "force-static";   // SSG
-export const dynamicParams = true;       // allow request-time match as a fallback
-export const revalidate = 60;            // small ISR window
+// ✅ Force Node runtime & pure SSG (no ISR, no request-time render)
+export const runtime = "nodejs";
+export const dynamic = "error";       // throw if not in the prerendered set
+export const dynamicParams = false;   // only allow the static params
+export const revalidate = false;
 
 type Params = { slug: string };
 
-// non-drafts only
 const POSTS = allPosts.filter((p) => !p.draft);
 
-// ---- helpers ----
-function cleanSlug(s: string | undefined | null): string {
-  // tolerate undefined during certain Next prerender phases
-  return (s ?? "").toString().trim().replace(/\s+/g, "-");
-}
-
-// ---- SSG params ----
+// --- SSG params: exactly the slugs we want to emit ---
 export function generateStaticParams() {
-  const slugs = POSTS.map((p) => ({ slug: p.slug }));
-  console.log("[blog] Static slugs:", slugs.map((s) => s.slug));
-  return slugs;
+  return POSTS.map((p) => ({ slug: p.slug }));
 }
 
-// ---- metadata ----
-export function generateMetadata({ params }: { params?: Partial<Params> }) {
-  const wanted = cleanSlug(params?.slug);
-  if (!wanted) return {};
-
-  const post = POSTS.find((p) => p.slug === wanted);
+// --- Metadata (uses only prerendered slugs) ---
+export function generateMetadata({ params }: { params: Params }) {
+  const post = POSTS.find((p) => p.slug === params.slug);
   if (!post) return {};
-
   const images = post.thumbnail ? [post.thumbnail] : post.image ? [post.image] : [];
   const description = post.description || post.summary || "";
 
   return {
     title: post.title,
     description,
-    openGraph: {
-      title: post.title,
-      description,
-      type: "article",
-      url: `/blog/${post.slug}`,
-      images,
-    },
-    twitter: {
-      card: images.length ? "summary_large_image" : "summary",
-      title: post.title,
-      description,
-      images,
-    },
+    openGraph: { title: post.title, description, type: "article", url: `/blog/${post.slug}`, images },
+    twitter: { card: images.length ? "summary_large_image" : "summary", title: post.title, description, images },
   };
 }
 
-// ---- MDX components ----
+// --- MDX components ---
 const MDXComponents: Record<string, React.ComponentType<any>> = {
   a: (props) => (
     <a
@@ -70,64 +47,25 @@ const MDXComponents: Record<string, React.ComponentType<any>> = {
       rel={props.href?.startsWith("http") ? "noopener noreferrer" : undefined}
     />
   ),
-  pre: (props) => (
-    <pre {...props} className="overflow-x-auto rounded-xl border bg-gray-50 p-4 text-sm" />
-  ),
+  pre: (props) => <pre {...props} className="overflow-x-auto rounded-xl border bg-gray-50 p-4 text-sm" />,
   code: (props) => <code {...props} className="rounded bg-gray-100 px-1 py-0.5" />,
   h2: (props) => <h2 {...props} className="mt-10 scroll-mt-24 text-2xl font-semibold" />,
   h3: (props) => <h3 {...props} className="mt-8 scroll-mt-24 text-xl font-semibold" />,
   ul: (props) => <ul {...props} className="list-disc pl-6" />,
   ol: (props) => <ol {...props} className="list-decimal pl-6" />,
-  blockquote: (props) => (
-    <blockquote
-      {...props}
-      className="border-l-4 border-emerald-600/40 pl-4 italic text-gray-700"
-    />
-  ),
+  blockquote: (props) => <blockquote {...props} className="border-l-4 border-emerald-600/40 pl-4 italic text-gray-700" />,
 };
 
-// ---- page ----
-export default function PostPage({ params }: { params?: Partial<Params> }) {
-  const wanted = cleanSlug(params?.slug);
-if (!wanted) {
-  return (
-    <main style={{ padding: 24 }}>
-      <h1>Blog Debug</h1>
-      <p><b>params.slug</b> was missing or empty at request-time.</p>
-    </main>
-  );
-}
-
-const post = POSTS.find((p) => p.slug === wanted);
-
-if (!post) {
-  return (
-    <main style={{ padding: 24 }}>
-      <h1>Blog Debug</h1>
-      <p>
-        Couldn’t find a post matching slug: <code>{wanted}</code>
-      </p>
-      <p>POSTS length: {POSTS.length}</p>
-      <details style={{ marginTop: 8 }}>
-        <summary>Show POSTS slugs</summary>
-        <ul>
-          {POSTS.map((p) => (
-            <li key={p.slug}><code>{p.slug}</code></li>
-          ))}
-        </ul>
-      </details>
-    </main>
-  );
-}
-;
+export default function PostPage({ params }: { params: Params }) {
+  // Since this is pure SSG, params.slug is guaranteed here for prerendered pages
+  const post = POSTS.find((p) => p.slug === params.slug);
+  if (!post) return notFound();
 
   return (
     <article className="bg-white">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-10">
         <nav className="mb-6 text-sm">
-          <Link href="/blog" className="text-emerald-700 hover:underline">
-            Blog
-          </Link>
+          <Link href="/blog" className="text-emerald-700 hover:underline">Blog</Link>
           <span className="mx-2 text-gray-400">/</span>
           <span className="text-gray-700">{post.title}</span>
         </nav>
@@ -139,22 +77,11 @@ if (!post) {
 
         <div className="mt-3 text-sm text-gray-600 flex flex-wrap items-center gap-x-3 gap-y-1">
           <span>{new Date(post.date).toLocaleDateString()}</span>
-          {post.author && (
-            <>
-              <span className="text-gray-300">•</span>
-              <span>{post.author}</span>
-            </>
-          )}
+          {post.author && (<><span className="text-gray-300">•</span><span>{post.author}</span></>)}
           {(typeof post.readingTime === "number" || post.readingTimeMinutes) && (
             <>
               <span className="text-gray-300">•</span>
-              <span>
-                {Math.max(
-                  1,
-                  Math.ceil((post.readingTime as number) || post.readingTimeMinutes || 0)
-                )}{" "}
-                min read
-              </span>
+              <span>{Math.max(1, Math.ceil((post.readingTime as number) || post.readingTimeMinutes || 0))} min read</span>
             </>
           )}
         </div>
@@ -186,10 +113,7 @@ if (!post) {
         </div>
 
         <div className="mt-12 border-t pt-6">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-2 text-emerald-700 hover:underline"
-          >
+          <Link href="/blog" className="inline-flex items-center gap-2 text-emerald-700 hover:underline">
             ← Back to all posts
           </Link>
         </div>
