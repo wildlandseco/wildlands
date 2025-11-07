@@ -8,9 +8,13 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
-export const dynamic = "force-static"; // build-time SSG
-export const dynamicParams = false;    // only slugs from generateStaticParams are valid
-export const revalidate = false;
+function cleanSlug(s: string) {
+  return s.trim().replace(/\s+/g, "-");
+};
+
+export const dynamic = "force-static";  // keep SSG
+export const dynamicParams = true;      // allow on-demand for safety
+export const revalidate = 60;           // small ISR window
 
 type Params = { slug: string };
 
@@ -75,8 +79,9 @@ const MDXComponents: Record<string, React.ComponentType<any>> = {
   ),
 };
 
-export default function PostPage({ params }: { params: Params }) {
-  const post = POSTS.find((p) => p.slug === params.slug);
+export default function PostPage({ params }: { params: {slug: string} }) {
+  const wanted = cleanSlug(params.slug);
+  const post = POSTS.find((p) => p.slug === wanted);
   if (!post) return notFound();
 
   return (
