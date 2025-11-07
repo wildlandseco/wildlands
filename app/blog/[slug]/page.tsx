@@ -8,38 +8,45 @@ import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 
-function cleanSlug(s: string) {
-  return s.trim().replace(/\s+/g, "-");
-};
-
-export const dynamic = "force-static";  // keep SSG
-export const dynamicParams = true;      // allow on-demand for safety
-export const revalidate = 60;           // small ISR window
+export const dynamic = "force-static";   // SSG
+export const dynamicParams = true;       // allow request-time match as a fallback
+export const revalidate = 60;            // small ISR window
 
 type Params = { slug: string };
 
-// Build the source list once (non-drafts only)
+// non-drafts only
 const POSTS = allPosts.filter((p) => !p.draft);
 
-// --- SSG params ---
+// ---- helpers ----
+function cleanSlug(s: string | undefined | null): string {
+  // tolerate undefined during certain Next prerender phases
+  return (s ?? "").toString().trim().replace(/\s+/g, "-");
+}
+
+// ---- SSG params ----
 export function generateStaticParams() {
   const slugs = POSTS.map((p) => ({ slug: p.slug }));
-  // Helpful to confirm in Vercel logs that your slug is included:
   console.log("[blog] Static slugs:", slugs.map((s) => s.slug));
   return slugs;
 }
 
-// --- Metadata ---
-export function generateMetadata({ params }: { params: Params }) {
-  const post = POSTS.find((p) => p.slug === params.slug);
+// ---- metadata ----
+export function generateMetadata({ params }: { params?: Partial<Params> }) {
+  const wanted = cleanSlug(params?.slug);
+  if (!wanted) return {};
+
+  const post = POSTS.find((p) => p.slug === wanted);
   if (!post) return {};
+
   const images = post.thumbnail ? [post.thumbnail] : post.image ? [post.image] : [];
+  const description = post.description || post.summary || "";
+
   return {
     title: post.title,
-    description: post.description || post.summary,
+    description,
     openGraph: {
       title: post.title,
-      description: post.description || post.summary,
+      description,
       type: "article",
       url: `/blog/${post.slug}`,
       images,
@@ -47,13 +54,13 @@ export function generateMetadata({ params }: { params: Params }) {
     twitter: {
       card: images.length ? "summary_large_image" : "summary",
       title: post.title,
-      description: post.description || post.summary,
+      description,
       images,
     },
   };
 }
 
-// --- MDX components ---
+// ---- MDX components ----
 const MDXComponents: Record<string, React.ComponentType<any>> = {
   a: (props) => (
     <a
@@ -79,8 +86,11 @@ const MDXComponents: Record<string, React.ComponentType<any>> = {
   ),
 };
 
-export default function PostPage({ params }: { params: {slug: string} }) {
-  const wanted = cleanSlug(params.slug);
+// ---- page ----
+export default function PostPage({ params }: { params?: Partial<Params> }) {
+  const wanted = cleanSlug(params?.slug);
+  if (!wanted) return notFound();
+
   const post = POSTS.find((p) => p.slug === wanted);
   if (!post) return notFound();
 
