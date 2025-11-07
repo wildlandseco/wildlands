@@ -89,10 +89,37 @@ const MDXComponents: Record<string, React.ComponentType<any>> = {
 // ---- page ----
 export default function PostPage({ params }: { params?: Partial<Params> }) {
   const wanted = cleanSlug(params?.slug);
-  if (!wanted) return notFound();
+if (!wanted) {
+  return (
+    <main style={{ padding: 24 }}>
+      <h1>Blog Debug</h1>
+      <p><b>params.slug</b> was missing or empty at request-time.</p>
+    </main>
+  );
+}
 
-  const post = POSTS.find((p) => p.slug === wanted);
-  if (!post) return notFound();
+const post = POSTS.find((p) => p.slug === wanted);
+
+if (!post) {
+  return (
+    <main style={{ padding: 24 }}>
+      <h1>Blog Debug</h1>
+      <p>
+        Couldn’t find a post matching slug: <code>{wanted}</code>
+      </p>
+      <p>POSTS length: {POSTS.length}</p>
+      <details style={{ marginTop: 8 }}>
+        <summary>Show POSTS slugs</summary>
+        <ul>
+          {POSTS.map((p) => (
+            <li key={p.slug}><code>{p.slug}</code></li>
+          ))}
+        </ul>
+      </details>
+    </main>
+  );
+}
+;
 
   return (
     <article className="bg-white">
